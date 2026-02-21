@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday! 💖</title>
+
+    <!-- Google Fonts: 'Mali' for a playful, cute handwriting style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CDNs for Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'cute': ['Mali', 'cursive'],
+                    },
+                    colors: {
+                        'pastel-pink': '#FFD1DC',
+                        'blush': '#FFB6C1',
+                        'cream': '#FFFDD0',
+                        'sage': '#D4E0D6',
+                        'sky': '#A1C9F1',
+                        'choco': '#5D4037',
+                        'mocha': '#8D6E63'
+                    },
+                    boxShadow: {
+                        'soft': '0 20px 40px rgba(255, 182, 193, 0.25)',
+                        'glow': '0 0 20px rgba(255, 182, 193, 0.6)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Mali', cursive;
+            background-color: #FFF5F7;
+            overflow-x: hidden;
+            color: #5D4037;
+        }
+
+        /* Three.js Background Canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* 2026 Soft Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+
+        /* Animations */
+        .bounce-header {
+            animation: softBounce 2.5s infinite ease-in-out;
+        }
+
+        @keyframes softBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .gift-pulse {
+            animation: pulseGift 2s infinite;
+        }
+
+        @keyframes pulseGift {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05) rotate(2deg); }
+            100% { transform: scale(1); }
+        }
+
+        /* Floating Hearts Animation */
+        .floating-heart {
+            position: fixed;
+            bottom: -50px;
+            font-size: 24px;
+            z-index: 0;
+            opacity: 0.7;
+            pointer-events: none;
+            animation: floatUp linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-110vh) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+        
+        /* Custom Scrollbar for hidden elements */
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative selection:bg-blush selection:text-white">
+
+    <!-- 3D Soft Pastel Bubbles Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Main Content Container -->
+    <main class="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-12">
+        
+        <!-- Header Section -->
+        <div class="text-center gs-fade-in opacity-0 translate-y-8 z-10">
+            <h1 class="text-6xl md:text-8xl font-bold text-blush bounce-header drop-shadow-sm tracking-wide">
+                Happy Birthday!
+            </h1>
+            <p class="text-2xl md:text-3xl text-mocha mt-4 font-semibold">
+                To my absolute favorite person 💖
+            </p>
+        </div>
+
+        <!-- Interactive Gift Box -->
+        <div id="gift-section" class="mt-16 flex flex-col items-center justify-center gs-fade-in opacity-0 z-20">
+            <button id="gift-btn" class="gift-pulse text-9xl hover:scale-110 transition-transform duration-300 drop-shadow-2xl focus:outline-none">
+                🎁
+            </button>
+            <div class="mt-6 bg-white/80 backdrop-blur-sm px-6 py-2 rounded-full shadow-soft text-blush font-bold text-xl tracking-wider">
+                Tap to open your gift! ✨
+            </div>
+        </div>
+
+        <!-- Hidden Reveal Section (Opens on Click) -->
+        <div id="reveal-section" class="hidden flex-col items-center max-w-2xl w-full mt-8 z-20 pb-12">
+            <div class="glass-card shadow-soft rounded-[40px] p-8 md:p-12 w-full text-center flex flex-col items-center relative overflow-hidden">
+                
+                <!-- Milk and Mocha GIF -->
+                <img src="https://media.tenor.com/81P8y3t-X4QAAAAi/milk-and-mocha-bear-hug.gif" 
+                     alt="Milk and Mocha Hugging" 
+                     class="w-48 md:w-56 rounded-3xl mb-6 shadow-md border-4 border-white pointer-events-none">
+                
+                <h2 class="text-4xl text-blush font-bold mb-4 drop-shadow-sm">Surprise! 🎉</h2>
+                
+                <p class="text-xl text-choco leading-relaxed mb-8">
+                    You make my world so much brighter just by being in it. 
+                    I'm incredibly lucky to have you. Wishing you a day as sweet, 
+                    beautiful, and special as you are! 🥰
+                </p>
+
+                <!-- Top 3 Reasons Section -->
+                <div class="w-full bg-[#FFF0F3]/80 border-2 border-white p-6 rounded-[30px] shadow-inner text-left">
+                    <h3 class="text-2xl font-bold text-[#F28482] mb-5 text-center">
+                        Top 3 Reasons You're My Favorite 🧸
+                    </h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-center space-x-4 bg-white/90 p-4 rounded-2xl shadow-sm hover:shadow-md transition-shadow transform hover:-translate-y-1">
+                            <div class="text-3xl bg-pastel-pink w-12 h-12 flex items-center justify-center rounded-full shadow-inner">😊</div>
+                            <span class="text-lg font-medium text-mocha">Your incredibly contagious smile</span>
+                        </li>
+                        <li class="flex items-center space-x-4 bg-white/90 p-4 rounded-2xl shadow-sm hover:shadow-md transition-shadow transform hover:-translate-y-1">
+                            <div class="text-3xl bg-sage w-12 h-12 flex items-center justify-center rounded-full shadow-inner">💖</div>
+                            <span class="text-lg font-medium text-mocha">Your warm, beautiful heart</span>
+                        </li>
+                        <li class="flex items-center space-x-4 bg-white/90 p-4 rounded-2xl shadow-sm hover:shadow-md transition-shadow transform hover:-translate-y-1">
+                            <div class="text-3xl bg-sky w-12 h-12 flex items-center justify-center rounded-full shadow-inner">✨</div>
+                            <span class="text-lg font-medium text-mocha">The magical way you make me feel</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <button id="hug-btn" class="mt-8 bg-blush text-white text-xl font-bold py-4 px-10 rounded-full shadow-glow hover:bg-[#FF9CB0] transition-colors transform hover:-translate-y-1 active:scale-95">
+                    Send Virtual Hug 🤗
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ----------------------------------------------------
+        // 1. GSAP Initial Animations
+        // ----------------------------------------------------
+        window.addEventListener('load', () => {
+            gsap.to('.gs-fade-in', {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                stagger: 0.3,
+                ease: 'back.out(1.2)'
+            });
+        });
+
+        // ----------------------------------------------------
+        // 2. Floating Hearts Generator
+        // ----------------------------------------------------
+        const emojis = ['💖', '💕', '🌸', '✨', '☁️'];
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            // Random styling
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 5 + 5) + 's'; // 5s to 10s
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            
+            document.body.appendChild(heart);
+            
+            // Remove from DOM after animation
+            setTimeout(() => {
+                heart.remove();
+            }, 10000);
+        }, 600); // Create a new element every 600ms
+
+        // ----------------------------------------------------
+        // 3. Interactivity: Gift Box Reveal & Confetti
+        // ----------------------------------------------------
+        const giftBtn = document.getElementById('gift-btn');
+        const giftSection = document.getElementById('gift-section');
+        const revealSection = document.getElementById('reveal-section');
+        const hugBtn = document.getElementById('hug-btn');
+
+        // Custom Heart Confetti logic
+        const defaults = { spread: 360, ticks: 100, gravity: 0.5, decay: 0.94, startVelocity: 30, colors: ['#FFB6C1', '#FFD1DC', '#FFFDD0', '#D4E0D6', '#A1C9F1'] };
+        
+        function shootConfetti() {
+            confetti({
+                ...defaults,
+                particleCount: 80,
+                scalar: 1.2,
+                shapes: ['circle', 'square']
+            });
+            // Shoot some text/emoji confetti if supported
+            confetti({
+                ...defaults,
+                particleCount: 30,
+                scalar: 2,
+                shapes: ['text'],
+                shapeOptions: { text: { value: ['💖', '🌸', '✨'] } }
+            });
+        }
+
+        giftBtn.addEventListener('click', () => {
+            // Animate gift box out
+            gsap.to(giftSection, {
+                scale: 0,
+                opacity: 0,
+                duration: 0.5,
+                ease: "back.in(1.5)",
+                onComplete: () => {
+                    giftSection.classList.add('hidden');
+                    revealSection.classList.remove('hidden');
+                    revealSection.classList.add('flex');
+                    
+                    // Animate reveal section in
+                    gsap.fromTo(revealSection, 
+                        { scale: 0.8, opacity: 0, y: 50 },
+                        { scale: 1, opacity: 1, y: 0, duration: 1, ease: "elastic.out(1, 0.7)" }
+                    );
+
+                    // Fire Confetti!
+                    shootConfetti();
+                    setTimeout(shootConfetti, 400);
+                    setTimeout(shootConfetti, 800);
+                }
+            });
+        });
+
+        hugBtn.addEventListener('click', () => {
+            shootConfetti();
+            hugBtn.innerText = "Hug Sent! 🥰";
+            setTimeout(() => { hugBtn.innerText = "Send Another Hug 🤗"; }, 2000);
+        });
+
+        // ----------------------------------------------------
+        // 4. Three.js Modern Soft Pastel Bubbles Background
+        // ----------------------------------------------------
+        const canvas = document.getElementById('bg-canvas');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color('#FFF5F7');
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 15;
+
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Soft Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(5, 5, 5);
+        scene.add(dirLight);
+
+        const pointLight = new THREE.PointLight(0xFFB6C1, 1, 50);
+        pointLight.position.set(-5, -5, 5);
+        scene.add(pointLight);
+
+        // Bubble Geometry and Material (Glass/Plastic look)
+        const geometry = new THREE.SphereGeometry(1, 64, 64);
+        
+        const pastelColors = [0xFFD1DC, 0xFFB6C1, 0xD4E0D6, 0xA1C9F1, 0xFFFDD0];
+        const bubbles = [];
+
+        for (let i = 0; i < 20; i++) {
+            const material = new THREE.MeshPhysicalMaterial({
+                color: pastelColors[Math.floor(Math.random() * pastelColors.length)],
+                transmission: 0.6, // Glass-like
+                opacity: 0.8,
+                transparent: true,
+                roughness: 0.2,
+                metalness: 0.1,
+                ior: 1.5,
+            });
+
+            const sphere = new THREE.Mesh(geometry, material);
+            
+            // Random positioning
+            sphere.position.x = (Math.random() - 0.5) * 30;
+            sphere.position.y = (Math.random() - 0.5) * 30;
+            sphere.position.z = (Math.random() - 0.5) * 15 - 5;
+            
+            // Random sizing
+            const scale = Math.random() * 1.5 + 0.5;
+            sphere.scale.set(scale, scale, scale);
+
+            // Store custom animation variables
+            sphere.userData = {
+                speedY: Math.random() * 0.02 + 0.005,
+                speedX: (Math.random() - 0.5) * 0.01,
+                floatOffset: Math.random() * Math.PI * 2
+            };
+
+            scene.add(sphere);
+            bubbles.push(sphere);
+        }
+
+        // Animation Loop
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = clock.getElapsedTime();
+
+            bubbles.forEach((bubble) => {
+                // Move up
+                bubble.position.y += bubble.userData.speedY;
+                bubble.position.x += bubble.userData.speedX + Math.sin(time + bubble.userData.floatOffset) * 0.005;
+
+                // Rotate slightly
+                bubble.rotation.x += 0.005;
+                bubble.rotation.y += 0.005;
+
+                // Reset position if it goes too high
+                if (bubble.position.y > 15) {
+                    bubble.position.y = -15;
+                    bubble.position.x = (Math.random() - 0.5) * 30;
+                }
+            });
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Handle Window Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
